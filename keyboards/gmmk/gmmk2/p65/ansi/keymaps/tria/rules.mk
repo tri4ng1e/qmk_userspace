@@ -16,7 +16,3 @@ RGB_MATRIX_CUSTOM_USER = yes
 # SRC += getreuer/layer_lock.c
 # SRC += getreuer/mouse_turbo_click.c
 # SRC += getreuer/select_word.c
-
-SRC += tria/key_tracker.c
-SRC += tria/idle_timer.c
-SRC += tria/rgb_utils.c

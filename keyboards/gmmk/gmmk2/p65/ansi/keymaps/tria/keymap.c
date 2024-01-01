@@ -60,6 +60,7 @@ bool is_keycode_f_row(uint16_t keycode) {
     return keycode >= KC_F1 && keycode <= KC_F12;
 }
 
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
     bool    caps_lock_on  = host_keyboard_led_state().caps_lock;
@@ -68,12 +69,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         case LAYER_MAIN:
         case LAYER_FAIN:
             if (caps_lock_on) {
-                rgb_matrix_hsvshift_by_keycode(led_min, led_max, LAYER_MAIN, is_keycode_caps_lock_indicator, 100);
+                rgb_matrix_hsvshift_by_keycode(led_min, led_max, LAYER_MAIN, tria_is_keycode_caps_indicator, 100);
             }
             break;
 
         case LAYER_FN:
-            rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, is_keycode_transparent, 0, 0, 0);
+            rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);
             break;
     }
 

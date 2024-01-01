@@ -14,10 +14,6 @@ extern uint8_t g_pwm_buffer[TRIA_DRIVER_COUNT][TRIA_PWM_REGISTER_COUNT];
 
 keypos_t led_key_pos[RGB_MATRIX_LED_COUNT];
 
-uint16_t transparent_keycodes[] = {TRIA_TRANSPARENT_KEYCODES};
-uint16_t caps_lock_indicators[] = {TRIA_CAPS_LOCK_INDICATORS};
-uint16_t num_lock_indicators[]  = {TRIA_NUM_LOCK_INDICATORS};
-
 void init_tria_rgb_utils(void) {
     // fill up lookup table for corresponding key position for a led
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
@@ -78,21 +74,31 @@ void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t la
 
 ////////////////////////////////////////////////////////////
 
-bool is_keycode_transparent(uint16_t keycode) {
+__attribute__ ((weak))
+bool tria_is_keycode_norgb_user(uint16_t keycode) {
     return keycode == KC_TRNS;
 }
 
-bool is_keycode_caps_lock_indicator(uint16_t keycode) {
-    for (uint8_t i = 0; i < TRIA_ARRAY_SIZEOF(caps_lock_indicators); i++) {
-        if (keycode == caps_lock_indicators[i]) { return true; }
-    }
-    return false;
+__attribute__ ((weak))
+bool tria_is_keycode_caps_indicator_user(uint16_t keycode) {
+    return keycode == KC_CAPS;
 }
-bool is_keycode_num_lock_indicator(uint16_t keycode) {
-    for (uint8_t i = 0; i < TRIA_ARRAY_SIZEOF(num_lock_indicators); i++) {
-        if (keycode == num_lock_indicators[i]) { return true; }
-    }
-    return false;
+
+__attribute__ ((weak))
+bool tria_is_keycode_num_indicator_user(uint16_t keycode) {
+    return keycode == KC_NUM;
+}
+
+bool tria_is_keycode_norgb(uint16_t keycode) {
+    return tria_is_keycode_norgb_user(keycode);
+}
+
+bool tria_is_keycode_caps_indicator(uint16_t keycode) {
+    return tria_is_keycode_caps_indicator_user(keycode);
+}
+
+bool tria_is_keycode_num_indicator(uint16_t keycode) {
+    return tria_is_keycode_num_indicator_user(keycode);
 }
 
 ////////////////////////////////////////////////////////////
