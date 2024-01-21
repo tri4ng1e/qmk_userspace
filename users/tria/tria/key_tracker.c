@@ -1,4 +1,5 @@
 #include "key_tracker.h"
+#include "tria/rgb_utils.h"
 
 tria_tracker_t g_tria_key_tracker;
 
@@ -57,6 +58,8 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
         }
     }
 
+    uint8_t current_layer = get_highest_layer(layer_state);
+
     if (record->event.pressed) {
         if (leds_found == 0) {
             // overflow protection
@@ -70,12 +73,16 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
 
             // add new LEDs
             uint8_t index = g_tria_key_tracker.count;
-            g_tria_key_tracker.count += leds_count;
             for (uint8_t i = 0; i < leds_count; i++) {
+                // do not add leds that are not the same keycode (i.e. pressed programatically and not present)
+                if (rgb_led_to_keycode(current_layer, leds[i]) != keycode) {
+                    continue;
+                }
                 g_tria_key_tracker.x[index]     = g_led_config.point[leds[i]].x;
                 g_tria_key_tracker.y[index]     = g_led_config.point[leds[i]].y;
                 g_tria_key_tracker.tick[index]  = 0;
                 g_tria_key_tracker.index[index++] = leds[i];
+                g_tria_key_tracker.count++;
             }
         } else {
             for (uint8_t i = 0; i < leds_found; i++) {

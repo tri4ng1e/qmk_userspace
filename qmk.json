@@ -1,4 +1,8 @@
 {
     "userspace_version": "1.0",
-    "build_targets": []
+    "build_targets": [
+        ["gmmk/gmmk2/p96/ansi", "tria"],
+        ["monsgeek/m5", "tria"],
+        ["gmmk/gmmk2/p65/ansi", "tria"]
+    ]
 }

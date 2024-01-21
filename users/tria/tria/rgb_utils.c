@@ -2,12 +2,18 @@
 
 #define TRIA_ARRAY_SIZEOF(a) (sizeof(a) / sizeof(a[0]))
 
-#ifdef AW20216S_DRIVER_COUNT
-#define TRIA_DRIVER_COUNT AW20216S_DRIVER_COUNT
-#define TRIA_PWM_REGISTER_COUNT 216
-#define LED_TYPE       aw_led
+#if defined(AW20216S_DRIVER_COUNT)
+  #define TRIA_DRIVER_COUNT AW20216S_DRIVER_COUNT
+  #define TRIA_PWM_REGISTER_COUNT 216
+  #define LED_TYPE       aw_led
+  #define LEDS_TYPE      g_aw_leds
+#elif defined(SNLED27351_I2C_ADDRESS_1)
+  #define TRIA_DRIVER_COUNT       SNLED27351_DRIVER_COUNT
+  #define TRIA_PWM_REGISTER_COUNT 192
+  #define LED_TYPE                ckled2001_led
+  #define LEDS_TYPE               g_ckled2001_leds
 #else
-#error Your LED driver is not supported by tria/rgb_utils.h yet
+  #error Your LED driver is not supported by tria/rgb_utils.h yet
 #endif
 
 extern uint8_t g_pwm_buffer[TRIA_DRIVER_COUNT][TRIA_PWM_REGISTER_COUNT];
@@ -28,11 +34,15 @@ void init_tria_rgb_utils(void) {
 
 ////////////////////////////////////////////////////////////
 
+uint16_t rgb_led_to_keycode(uint8_t layer, uint16_t led) {
+    return keymap_key_to_keycode(layer, led_key_pos[led]);
+}
+
 RGB rgb_matrix_get_color(int index) { 
     RGB led_color;
     LED_TYPE led;
     if (index >= 0 && index < RGB_MATRIX_LED_COUNT) {
-        memcpy_P(&led, (&g_aw_leds[index]), sizeof(led));
+        memcpy_P(&led, (&LEDS_TYPE[index]), sizeof(led));
         led_color.r = g_pwm_buffer[led.driver][led.r];
         led_color.g = g_pwm_buffer[led.driver][led.g];
         led_color.b = g_pwm_buffer[led.driver][led.b];
@@ -76,7 +86,7 @@ void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t la
 
 __attribute__ ((weak))
 bool tria_is_keycode_norgb_user(uint16_t keycode) {
-    return keycode == KC_TRNS;
+    return keycode == KC_TRNS || keycode == KC_NO;
 }
 
 __attribute__ ((weak))

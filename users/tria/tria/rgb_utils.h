@@ -5,6 +5,8 @@
 
 void init_tria_rgb_utils(void);
 
+uint16_t rgb_led_to_keycode(uint8_t layer, uint16_t led);
+
 RGB rgb_matrix_get_color(int index);
 HSV rgb_matrix_get_color_hsv(int index);
 void rgb_matrix_set_color_hsv(int index, HSV hsv);
