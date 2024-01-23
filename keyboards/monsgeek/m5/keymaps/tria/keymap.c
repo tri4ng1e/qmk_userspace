@@ -57,5 +57,19 @@ combo_t key_combos[] = {
     [CMB_PREV]  = COMBO(cmb_prev,  KC_MPRV),
     [CMB_NEXT]  = COMBO(cmb_next,  KC_MNXT),
     [CMB_PAUSE] = COMBO(cmb_pause, KC_MPLY),
-	[CMB_RUS] = COMBO(cmb_rus, KC_F14),
+	[CMB_RUS]   = COMBO(cmb_rus, KC_F14),
 };
+
+void tria_lang_init_user(void) {
+	tria_lang_set_keycode(TRIA_EN, KC_F13);
+	tria_lang_set_keycode(TRIA_RU, KC_F14);
+}
+
+bool tria_process_custom_keycode_pressed(uint16_t keycode) {
+	switch (keycode) {
+		case SNCASET:
+			sentence_case_toggle();
+			return false;
+	}
+	return true;
+}

@@ -1,10 +1,10 @@
+// getreuer overrides for en,ru
+#include "tria/multi_lang.h"
+#include "tria/multi_lang_enru.h"
+
 #include "getreuer/sentence_case.h"
 
-extern bool tria_lang_russian;
-
-char sentence_case_press_user_en(uint16_t keycode,
-                              keyrecord_t* record,
-                              uint8_t mods) {
+char sentence_case_press_user_en(uint16_t keycode, keyrecord_t* record, uint8_t mods) {
     if ((mods & ~(MOD_MASK_SHIFT | MOD_BIT(KC_RALT))) == 0) {
         const bool shifted = mods & MOD_MASK_SHIFT;
         switch (keycode) {
@@ -38,9 +38,7 @@ char sentence_case_press_user_en(uint16_t keycode,
     return '\0';
 }
 
-char sentence_case_press_user_ru(uint16_t keycode,
-                              keyrecord_t* record,
-                              uint8_t mods) {
+char sentence_case_press_user_ru(uint16_t keycode, keyrecord_t* record, uint8_t mods) {
     if ((mods & ~(MOD_MASK_SHIFT | MOD_BIT(KC_RALT))) == 0) {
         const bool shifted = mods & MOD_MASK_SHIFT;
         switch (keycode) {
@@ -80,10 +78,8 @@ char sentence_case_press_user_ru(uint16_t keycode,
     return '\0';
 }
 
-char sentence_case_press_user(uint16_t keycode,
-                              keyrecord_t* record,
-                              uint8_t mods) {
-    if (tria_lang_russian) {
+char sentence_case_press_user(uint16_t keycode, keyrecord_t* record, uint8_t mods) {
+    if (tria_lang_get() == TRIA_RU) {
         return sentence_case_press_user_ru(keycode, record, mods);
     } else {
         return sentence_case_press_user_en(keycode, record, mods);

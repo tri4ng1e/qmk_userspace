@@ -60,7 +60,9 @@ void rgb_matrix_set_color_hsv(int index, HSV hsv) {
     rgb_matrix_set_color(index, c.r, c.g, c.b);
 }
 
-void rgb_matrix_set_color_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), uint8_t red, uint8_t green, uint8_t blue) {
+
+
+void rgb_matrix_set_color_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), uint8_t red, uint8_t green, uint8_t blue) {
     for (uint8_t i = led_min; i < led_max; i++) {
         if (i == NO_LED) { continue; }
         uint16_t keycode = keymap_key_to_keycode(layer, led_key_pos[i]);
@@ -70,7 +72,7 @@ void rgb_matrix_set_color_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t l
     }
 }
 
-void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), int16_t shift) {
+void rgb_matrix_hsvshift_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), int16_t shift) {
     for (uint8_t i = led_min; i < led_max; i++) {
         if (i == NO_LED) { continue; }
         uint16_t keycode = keymap_key_to_keycode(layer, led_key_pos[i]);
@@ -80,6 +82,21 @@ void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t la
             rgb_matrix_set_color_hsv(i, hsv);
         }
     }
+}
+
+bool (*tria_create_predicate_from_value(uint16_t kc))(uint16_t) {
+    bool predicate(uint16_t x) { return x == kc; }
+    return &predicate;
+}
+
+void rgb_matrix_set_color_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, uint16_t keycode, uint8_t red, uint8_t green, uint8_t blue) {
+    bool (*pred)(uint16_t) = tria_create_predicate_from_value(keycode);
+    rgb_matrix_set_color_by_keycode_fn(led_min, led_max, layer, pred, red, green, blue);
+}
+
+void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, uint16_t keycode, int16_t shift) {
+    bool (*pred)(uint16_t) = tria_create_predicate_from_value(keycode);
+    rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, layer, pred, shift);
 }
 
 ////////////////////////////////////////////////////////////
