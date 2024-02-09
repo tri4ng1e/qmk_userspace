@@ -1,5 +1,9 @@
 #pragma once
 
+// QMK settings
+#define COMBO_TERM 100
+
+#define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 
 // getreuer settings
 #define SELECT_WORD_TIMEOUT   1500

@@ -28,15 +28,18 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     // bool    num_lock_on   = host_keyboard_led_state().num_lock;
     bool    caps_lock_on  = host_keyboard_led_state().caps_lock;
     
+    // gray out inactive keys
+    rgb_matrix_set_color_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);
+
     switch (current_layer) {
         case L_MAIN:
+        case L_LANG:
             if (caps_lock_on) {
                 rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, L_MAIN, tria_is_keycode_caps_indicator, 100);
             }
             break;
 
         case L_FN:
-            rgb_matrix_set_color_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);
             break;
     }
 
@@ -87,6 +90,8 @@ void keyboard_post_init_user(void) {
     rgb_matrix_mode(RGB_MATRIX_CUSTOM_TRIA_GRADIENT_UP_DOWN);
     rgb_matrix_config.hsv   = tria_rgb_default_color;
     rgb_matrix_config.speed = tria_rgb_default_speed;
+
+    layer_on(L_LANG);
 
     init_tria_rgb_utils();
     tria_lang_init();

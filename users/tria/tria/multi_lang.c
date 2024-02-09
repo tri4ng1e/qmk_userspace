@@ -1,13 +1,11 @@
 #include "tria/multi_lang.h"
 
 uint8_t tria_lang_current = 0;
-
 uint16_t tria_lang_keycodes_select[TRIA_MULTI_LANG_COUNT];
 
 void tria_lang_set_keycode(uint8_t lang, uint16_t keycode) {
     tria_lang_keycodes_select[lang] = keycode;
 }
-
 
 __attribute__ ((weak))
 void tria_lang_init_user(void) {}

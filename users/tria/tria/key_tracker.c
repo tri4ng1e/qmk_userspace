@@ -19,9 +19,9 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
         }
         if (pos != UINT8_MAX) {
             uint8_t count = g_tria_key_tracker.count - pos + 1;
-            memmove(&g_tria_key_tracker.x[pos], &g_tria_key_tracker.x[pos+1],     count * sizeof(g_tria_key_tracker.x[0]));
-            memmove(&g_tria_key_tracker.y[pos], &g_tria_key_tracker.y[pos+1],     count * sizeof(g_tria_key_tracker.y[0]));
-            memmove(&g_tria_key_tracker.tick[pos], &g_tria_key_tracker.tick[pos+1],   count * sizeof(g_tria_key_tracker.tick[0]));
+            memmove(&g_tria_key_tracker.x[pos],     &g_tria_key_tracker.x[pos+1],     count * sizeof(g_tria_key_tracker.x[0]));
+            memmove(&g_tria_key_tracker.y[pos],     &g_tria_key_tracker.y[pos+1],     count * sizeof(g_tria_key_tracker.y[0]));
+            memmove(&g_tria_key_tracker.tick[pos],  &g_tria_key_tracker.tick[pos+1],  count * sizeof(g_tria_key_tracker.tick[0]));
             memmove(&g_tria_key_tracker.index[pos], &g_tria_key_tracker.index[pos+1], count * sizeof(g_tria_key_tracker.index[0]));
             g_tria_key_tracker.count--;
         }
@@ -64,8 +64,8 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
         if (leds_found == 0) {
             // overflow protection
             if (g_tria_key_tracker.count + leds_count > TRIA_KEY_TRACKER_MAX_ENTRIES) {
-                memcpy(&g_tria_key_tracker.x[0],   &g_tria_key_tracker.x[leds_count],       TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count);
-                memcpy(&g_tria_key_tracker.y[0],   &g_tria_key_tracker.y[leds_count],       TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count);
+                memcpy(&g_tria_key_tracker.x[0],     &g_tria_key_tracker.x[leds_count],     TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count);
+                memcpy(&g_tria_key_tracker.y[0],     &g_tria_key_tracker.y[leds_count],     TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count);
                 memcpy(&g_tria_key_tracker.tick[0],  &g_tria_key_tracker.tick[leds_count], (TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count) * 2); // 16 bit
                 memcpy(&g_tria_key_tracker.index[0], &g_tria_key_tracker.index[leds_count], TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count);
                 g_tria_key_tracker.count = TRIA_KEY_TRACKER_MAX_ENTRIES - leds_count;
