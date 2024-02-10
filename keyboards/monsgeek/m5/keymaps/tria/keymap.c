@@ -60,15 +60,12 @@ const uint16_t PROGMEM cmb_prev[]   = {SNDDEV,  KC_VOLD, COMBO_END};
 const uint16_t PROGMEM cmb_next[]   = {SNDDEV,  KC_VOLU, COMBO_END};
 const uint16_t PROGMEM cmb_pause[]  = {SNDDEV,  KC_MUTE, COMBO_END};
 const uint16_t PROGMEM cmb_rus[]    = {KC_LSFT, T_CLF13, COMBO_END};
-const uint16_t PROGMEM cmb_accent[] = {KC_LALT, KC_GRV,  COMBO_END};
-// const uint16_t PROGMEM cmb_emdash[] = {KC_LALT, KC_GRV, COMBO_END};
 
 combo_t key_combos[] = {
     [CMB_PREV]   = COMBO(cmb_prev,   KC_MPRV),
     [CMB_NEXT]   = COMBO(cmb_next,   KC_MNXT),
     [CMB_PAUSE]  = COMBO(cmb_pause,  KC_MPLY),
 	[CMB_RUS]    = COMBO(cmb_rus,    KC_F14),
-	// [CMB_ACCENT] = COMBO(cmb_accent, UC(0x0301)),
 };
 
 TRIA_TD_CREATE_TAP_HOLD(TD_CLF13,                    // F13 + CapsLock

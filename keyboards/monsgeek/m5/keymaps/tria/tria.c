@@ -16,11 +16,16 @@ bool is_keycode_lang_layer_indicator(uint16_t keycode) {
 }
 
 bool is_keycode_lang_indicator(uint16_t keycode) {
-    return keycode == KC_LCTL;
+    return keycode == KC_LALT;
 }
 
-bool is_keycode_lang2_indicator(uint16_t keycode) {
-    return keycode == KC_LALT;
+bool is_keycode_mouse_layer_indicator(uint16_t keycode) {
+    return (keycode >= KC_NUM && keycode <= KC_KP_DOT) ||
+           (keycode >= KC_MS_U && keycode <= KC_MS_BTN2) ||
+            keycode == KC_MS_WH_UP ||
+            keycode == KC_MS_WH_DOWN ||
+           (keycode >= KC_MS_ACCEL0 && keycode <= KC_MS_ACCEL2)
+    ;
 }
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
@@ -31,16 +36,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     // gray out inactive keys
     rgb_matrix_set_color_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);
 
-    switch (current_layer) {
-        case L_MAIN:
-        case L_LANG:
-            if (caps_lock_on) {
-                rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, L_MAIN, tria_is_keycode_caps_indicator, 100);
-            }
-            break;
-
-        case L_FN:
-            break;
+    if (caps_lock_on) {
+        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_caps_indicator, 100);
     }
 
     if (is_sentence_case_on()) {
@@ -48,15 +45,18 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if (IS_LAYER_ON(L_LANG)) {
-        // rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_layer_indicator, 100);
         rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_layer_indicator, 100);
 
         switch (tria_lang_get()) {
             case TRIA_EN:
                 break;
             case TRIA_RU:
-                rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang2_indicator, 100);
+                rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_indicator, 100);
         }
+    }
+
+    if (IS_LAYER_ON(L_MOUS)) {
+        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, L_MOUS, is_keycode_mouse_layer_indicator, 100);
     }
 
     return false;

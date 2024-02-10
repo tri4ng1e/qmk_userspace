@@ -12,11 +12,14 @@
 #include "getreuer/select_word.h"
 #include "getreuer/sentence_case.h"
 
+#define ___0___ KC_NO
+
 enum layers {
     L_MAIN,
     L_LANG,
+    L_MOUS,
+    L_UNC,
     L_FN,
-    L_UNC
 };
 
 enum custom_keycodes {
@@ -50,4 +53,6 @@ enum unicode_symbols {
 enum tap_dances {
     TD_CLF13,
 };
+
 #define T_CLF13 TD(TD_CLF13)
+#define TGMOUSE TG(L_MOUS)

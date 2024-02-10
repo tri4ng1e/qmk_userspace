@@ -5,6 +5,11 @@
 
 #define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 
+// qmk mouse settings
+#define MK_KINETIC_SPEED
+#define MOUSEKEY_MOVE_DELTA 10
+#define MOUSEKEY_BASE_SPEED 4000
+
 // getreuer settings
 #define SELECT_WORD_TIMEOUT   1500
 #define SENTENCE_CASE_TIMEOUT 2000
