@@ -5,7 +5,7 @@
 // RGB_MATRIX idle settings
 bool     tria_idle_enabled    = true;
 uint32_t tria_idle_timeout    = 10;    // s
-uint8_t  tria_idle_brightness = 50; 
+uint8_t  tria_idle_brightness = 75;
 uint16_t tria_idle_off_time   = 1000;  // ms
 uint16_t tria_idle_on_time    = 100;   // ms
 
