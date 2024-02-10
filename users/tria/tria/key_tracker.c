@@ -75,7 +75,7 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
             uint8_t index = g_tria_key_tracker.count;
             for (uint8_t i = 0; i < leds_count; i++) {
                 // do not add leds that are not the same keycode (i.e. pressed programatically and not present)
-                if (rgb_led_to_keycode(current_layer, leds[i]) != keycode) {
+                if (rgb_led_to_keycode(current_layer, leds[i], true) != keycode) {
                     continue;
                 }
                 g_tria_key_tracker.x[index]     = g_led_config.point[leds[i]].x;

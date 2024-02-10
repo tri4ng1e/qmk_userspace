@@ -5,7 +5,7 @@
 
 void init_tria_rgb_utils(void);
 
-uint16_t rgb_led_to_keycode(uint8_t layer, uint16_t led);
+uint16_t rgb_led_to_keycode(int8_t layer, uint16_t led, bool fallthrough);
 
 RGB rgb_matrix_get_color(int index);
 HSV rgb_matrix_get_color_hsv(int index);

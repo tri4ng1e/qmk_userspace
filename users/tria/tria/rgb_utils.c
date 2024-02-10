@@ -1,4 +1,5 @@
 #include "tria/rgb_utils.h"
+#include "tria/utils.h"
 
 #define TRIA_ARRAY_SIZEOF(a) (sizeof(a) / sizeof(a[0]))
 
@@ -34,8 +35,13 @@ void init_tria_rgb_utils(void) {
 
 ////////////////////////////////////////////////////////////
 
-uint16_t rgb_led_to_keycode(uint8_t layer, uint16_t led) {
-    return keymap_key_to_keycode(layer, led_key_pos[led]);
+uint16_t rgb_led_to_keycode(int8_t layer, uint16_t led, bool fallthrough) {
+    uint16_t ret = keymap_key_to_keycode(layer, led_key_pos[led]);
+    while (fallthrough && ret == KC_TRNS && layer >= 0) {
+        layer = get_previous_layer(layer);
+        ret = keymap_key_to_keycode(layer, led_key_pos[led]);
+    }
+    return ret;
 }
 
 RGB rgb_matrix_get_color(int index) { 
@@ -65,7 +71,7 @@ void rgb_matrix_set_color_hsv(int index, HSV hsv) {
 void rgb_matrix_set_color_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), uint8_t red, uint8_t green, uint8_t blue) {
     for (uint8_t i = led_min; i < led_max; i++) {
         if (i == NO_LED) { continue; }
-        uint16_t keycode = keymap_key_to_keycode(layer, led_key_pos[i]);
+        uint16_t keycode = rgb_led_to_keycode(layer, i, true);
         if ((*is_keycode)(keycode)) {
             rgb_matrix_set_color(i, red, green, blue);
         }
@@ -75,7 +81,7 @@ void rgb_matrix_set_color_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_
 void rgb_matrix_hsvshift_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), int16_t shift) {
     for (uint8_t i = led_min; i < led_max; i++) {
         if (i == NO_LED) { continue; }
-        uint16_t keycode = keymap_key_to_keycode(layer, led_key_pos[i]);
+        uint16_t keycode = rgb_led_to_keycode(layer, i, true);
         if ((*is_keycode)(keycode)) {
             HSV hsv = rgb_matrix_get_color_hsv(i);
             hsv.h += shift;
