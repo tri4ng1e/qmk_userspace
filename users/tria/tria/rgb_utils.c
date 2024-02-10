@@ -109,7 +109,7 @@ void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t la
 
 __attribute__ ((weak))
 bool tria_is_keycode_norgb_user(uint16_t keycode) {
-    return keycode == KC_TRNS || keycode == KC_NO;
+    return keycode == KC_NO;
 }
 
 __attribute__ ((weak))
