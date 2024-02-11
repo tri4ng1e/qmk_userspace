@@ -13,6 +13,7 @@
 #include "getreuer/sentence_case.h"
 
 #define ___0___ KC_NO
+#define COMMA ,
 
 enum layers {
     L_MAIN,

@@ -92,9 +92,9 @@ combo_t key_combos[] = {
 	[CMB_RUS]    = COMBO(cmb_rus,    KC_F14),
 };
 
-TRIA_TD_CREATE_TAP_HOLD(TD_CLF13,                    // F13 + CapsLock
-    tap_code16(KC_F13),     TD_NO_ACTION,            // single
-    register_code(KC_CAPS), unregister_code(KC_CAPS) // single hold
+TRIA_TD_CREATE_TAP_HOLD(TD_CLF13, // F13 + CapsLock
+    tap_code16(KC_F13) COMMA tria_lang_check(KC_F13), TD_NO_ACTION,            // single
+    register_code(KC_CAPS),                           unregister_code(KC_CAPS) // single hold
 )
 
 tap_dance_action_t tap_dance_actions[] = {
@@ -102,7 +102,7 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 void tria_lang_init_user(void) {
-	tria_lang_set_keycode(TRIA_EN, T_CLF13);
+	tria_lang_set_keycode(TRIA_EN, KC_F13);
 	tria_lang_set_keycode(TRIA_RU, KC_F14);
 }
 
