@@ -1,21 +1,33 @@
 #pragma once
 
 #include "quantum.h"
+#include "cimple_ring_buffer/cimple_ring_buffer.h"
 
 #define TRIA_KEY_TRACKER_MAX_ENTRIES 30
+
+#ifndef TRIA_KEY_TRACKER_REUSE_ENTRIES
+#define TRIA_KEY_TRACKER_REUSE_ENTRIES false
+#endif
 
 #define TRIA_KEY_TRACKER_REMOVE_STALE_RECORDS true
 #define TRIA_KEY_TRACKER_MAX_TICK 5000
 
-#define TRIA_KEY_TRACKER_REUSE_ENTRIES false
 
 typedef struct PACKED {
-    uint8_t  count;
-    uint8_t  x[TRIA_KEY_TRACKER_MAX_ENTRIES];
-    uint8_t  y[TRIA_KEY_TRACKER_MAX_ENTRIES];
-    uint16_t tick[TRIA_KEY_TRACKER_MAX_ENTRIES];
-    uint8_t  index[TRIA_KEY_TRACKER_MAX_ENTRIES];
-} tria_tracker_t;
+    uint8_t  x;
+    uint8_t  y;
+    uint8_t  index;
+    uint16_t tick;
+} tria_tracker_item_t;
+
+typedef struct {
+    uint8_t rb_index;
+    uint8_t led_index;
+} tria_tracker_index_pair_t;
+
+extern ring_buffer_t tria_tracker_rb;
+
+void tria_key_tracker_init(void);
 
 void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record);
 void process_tria_key_tracker_tick(void);

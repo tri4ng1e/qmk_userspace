@@ -4,7 +4,8 @@ RGB_MATRIX_EFFECT(TRIA_GRADIENT_UP_DOWN)
 
 #include "tria/key_tracker.h"
 #include "tria/idle_timer.h"
-extern tria_tracker_t g_tria_key_tracker;
+#include "cimple_ring_buffer/cimple_ring_buffer.h"
+extern ring_buffer_t tria_tracker_rb;
 
 // extern const uint16_t tria_idle_timeout;
 // extern uint16_t tria_idle_brightness;
@@ -96,12 +97,13 @@ bool TRIA_GRADIENT_UP_DOWN(effect_params_t* params) {
         // if (tria_gradient_running) hsv.h += scale16by8(g_rgb_timer, rgb_matrix_config.speed / 40);
         
         // reactive effect: multi-splash based on custom key tracker
-        for (uint8_t j = 0; j < g_tria_key_tracker.count; j++) {
+        for (uint8_t j = 0; j < tria_tracker_rb.count; j++) {
+            tria_tracker_item_t * item = (tria_tracker_item_t*)ring_buffer_get(&tria_tracker_rb, j);
             uint8_t dist  = LED_DISTANCE(
                 g_led_config.point[i].x, g_led_config.point[i].y,
-                g_tria_key_tracker.x[j], g_tria_key_tracker.y[j]
+                item->x, item->y
             );
-            hsv = TRIA_GRADIENT_UP_DOWN_math(hsv, dist, g_tria_key_tracker.tick[j]);
+            hsv = TRIA_GRADIENT_UP_DOWN_math(hsv, dist, item->tick);
         }
 
         // apply idle effect

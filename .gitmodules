@@ -1,0 +1,3 @@
+[submodule "users/tria/cimple_ring_buffer"]
+	path = users/tria/cimple_ring_buffer
+	url = https://github.com/tri4ng1e/cimple_ring_buffer

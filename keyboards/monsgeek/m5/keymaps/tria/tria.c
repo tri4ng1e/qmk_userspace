@@ -95,6 +95,7 @@ void keyboard_post_init_user(void) {
 
     init_tria_rgb_utils();
     tria_lang_init();
+    tria_key_tracker_init();
     reset_tria_idle_timer();
 }
 
