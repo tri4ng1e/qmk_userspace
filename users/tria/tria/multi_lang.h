@@ -25,5 +25,5 @@ extern uint8_t tria_lang_current;
 void tria_lang_init(void);
 void tria_lang_set_keycode(uint8_t lang, uint16_t keycode);
 
-void tria_lang_check(uint16_t keycode, keyrecord_t* record);
+void tria_lang_check(uint16_t keycode);
 uint8_t tria_lang_get(void);

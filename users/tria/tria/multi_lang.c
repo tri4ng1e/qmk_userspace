@@ -55,16 +55,14 @@ void tria_lang_rcycle(void) {
     tria_lang_current--;
 }
 
-void tria_lang_check(uint16_t keycode, keyrecord_t* record) {
-    if (record-> event.pressed) {
-        tria_lang_check_select(keycode);
-        switch (tria_lang_check_cycle_user(keycode)) {
-            case TRIA_LANG_IGNORE:
-                break;
-            case TRIA_LANG_CYCLE:
-                tria_lang_cycle(); break;
-            case TRIA_LANG_RCYCLE:
-                tria_lang_rcycle(); break;
-        }
+void tria_lang_check(uint16_t keycode) {
+    tria_lang_check_select(keycode);
+    switch (tria_lang_check_cycle_user(keycode)) {
+        case TRIA_LANG_IGNORE:
+            break;
+        case TRIA_LANG_CYCLE:
+            tria_lang_cycle(); break;
+        case TRIA_LANG_RCYCLE:
+            tria_lang_rcycle(); break;
     }
 }

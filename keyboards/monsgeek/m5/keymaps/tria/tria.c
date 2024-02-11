@@ -67,7 +67,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // process tria-based stuff
     reset_tria_idle_timer();
     process_tria_key_tracker(keycode, record);
-    tria_lang_check(keycode, record);
 
     // getreuer
     if (!process_select_word(keycode, record, SELWORD)) { return false; }
@@ -75,6 +74,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // custom keycodes
     if (record->event.pressed) {
+        tria_lang_check(keycode);
         return tria_process_custom_keycode_pressed(keycode);
     } else {
         return tria_process_custom_keycode_released(keycode);
