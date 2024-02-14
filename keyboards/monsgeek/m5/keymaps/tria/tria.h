@@ -6,6 +6,7 @@
 #include "tria/idle_timer.h"
 #include "tria/rgb_utils.h"
 #include "tria/tap_dance.h"
+#include "tria/lang_word.h"
 #include "tria/multi_lang.h"
 #include "tria/multi_lang_enru.h"
 

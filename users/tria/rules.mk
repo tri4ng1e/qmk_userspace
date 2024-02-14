@@ -12,6 +12,7 @@ SRC += tria/rgb_utils.c
 SRC += tria/tap_dance.c
 SRC += tria/utils.c
 SRC += tria/multi_lang.c
+SRC += tria/lang_word.c
 
 ifeq ($(strip $(TRIA_LANG_USE_ENRU)), yes)
     SRC += tria/multi_lang_enru.c

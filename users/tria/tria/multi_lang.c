@@ -1,4 +1,5 @@
 #include "tria/multi_lang.h"
+#include "tria/utils.h"
 
 uint8_t tria_lang_current = 0;
 uint16_t tria_lang_keycodes_select[TRIA_MULTI_LANG_COUNT];
@@ -65,4 +66,15 @@ void tria_lang_check(uint16_t keycode) {
         case TRIA_LANG_RCYCLE:
             tria_lang_rcycle(); break;
     }
+}
+
+bool tria_lang_switch(uint8_t lang) {
+    if (lang >= TRIA_MULTI_LANG_COUNT) {
+        return false;
+    }
+    tria_save_mods();
+    tap_code16(tria_lang_keycodes_select[lang]);
+    tria_lang_current = lang;
+    tria_restore_mods();
+    return true;
 }

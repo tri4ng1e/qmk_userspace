@@ -20,6 +20,8 @@
 
 // clang-format off
 
+		// here, some quick templates for ya
+
 		// _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
 		// _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
 		// _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
@@ -92,9 +94,11 @@ combo_t key_combos[] = {
 	[CMB_RUS]    = COMBO(cmb_rus,    KC_F14),
 };
 
-TRIA_TD_CREATE_TAP_HOLD(TD_CLF13, // F13 + CapsLock
-    tap_code16(KC_F13) COMMA tria_lang_check(KC_F13), TD_NO_ACTION,            // single
-    register_code(KC_CAPS),                           unregister_code(KC_CAPS) // single hold
+TRIA_TD_CREATE_DOUBLE(TD_CLF13, // F13 for lang change + CapsLock on hold + lang case on double tap
+	tap_code16(KC_F13) COMMA tria_lang_check(KC_F13), TD_NO_ACTION,
+	register_code(KC_CAPS),                           unregister_code(KC_CAPS),
+	lang_word_toggle(),                               TD_NO_ACTION,
+	TD_NO_ACTION,                                     TD_NO_ACTION
 )
 
 tap_dance_action_t tap_dance_actions[] = {

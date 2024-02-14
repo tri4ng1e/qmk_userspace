@@ -64,9 +64,10 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // process tria-based stuff
+    // tria
     reset_tria_idle_timer();
     process_tria_key_tracker(keycode, record);
+    lang_word_process(keycode);
 
     // getreuer
     if (!process_select_word(keycode, record, SELWORD)) { return false; }

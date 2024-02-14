@@ -2,6 +2,8 @@
 #include "tria/multi_lang.h"
 #include "tria/multi_lang_enru.h"
 
+#include "tria/lang_word.h"
+
 #include "getreuer/sentence_case.h"
 
 // custom behavior for getreuer sentence case
@@ -38,7 +40,6 @@ char sentence_case_press_user_en(uint16_t keycode, keyrecord_t* record, uint8_t 
     sentence_case_clear();
     return '\0';
 }
-
 char sentence_case_press_user_ru(uint16_t keycode, keyrecord_t* record, uint8_t mods) {
     if ((mods & ~(MOD_MASK_SHIFT | MOD_BIT(KC_RALT))) == 0) {
         const bool shifted = mods & MOD_MASK_SHIFT;
@@ -185,4 +186,13 @@ void unicode_input_finish(void) {
     }
 
     set_mods(unicode_saved_mods); // Reregister previously set mods
+}
+
+// lang word library extension
+void lang_word_toggle(void) {
+    if (lang_word_is_active()) {
+        lang_word_deactivate();
+    } else {
+        lang_word_activate(!(bool)tria_lang_get());
+    }
 }

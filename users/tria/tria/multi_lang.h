@@ -27,3 +27,5 @@ void tria_lang_set_keycode(uint8_t lang, uint16_t keycode);
 
 void tria_lang_check(uint16_t keycode);
 uint8_t tria_lang_get(void);
+
+bool tria_lang_switch(uint8_t);
