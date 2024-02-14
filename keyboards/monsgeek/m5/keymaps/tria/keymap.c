@@ -85,13 +85,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM cmb_prev[]   = {SNDDEV,  KC_VOLD, COMBO_END};
 const uint16_t PROGMEM cmb_next[]   = {SNDDEV,  KC_VOLU, COMBO_END};
 const uint16_t PROGMEM cmb_pause[]  = {SNDDEV,  KC_MUTE, COMBO_END};
-const uint16_t PROGMEM cmb_rus[]    = {KC_LSFT, T_CLF13, COMBO_END};
 
 combo_t key_combos[] = {
     [CMB_PREV]   = COMBO(cmb_prev,   KC_MPRV),
     [CMB_NEXT]   = COMBO(cmb_next,   KC_MNXT),
     [CMB_PAUSE]  = COMBO(cmb_pause,  KC_MPLY),
-	[CMB_RUS]    = COMBO(cmb_rus,    KC_F14),
 };
 
 TRIA_TD_CREATE_DOUBLE(TD_CLF13, // F13 for lang change + CapsLock on hold + lang case on double tap
@@ -115,6 +113,13 @@ bool tria_process_custom_keycode_pressed(uint16_t keycode) {
 		case SNCASET:
 			sentence_case_toggle();
 			return false;
+		case T_CLF13: // combo-like behavior for Shift+F13, combo messes up the shift mod state
+			if ((get_mods() | get_oneshot_mods() | get_weak_mods()) == MOD_BIT(KC_LSFT)) {
+				tria_lang_switch(TRIA_RU);
+				return false;
+			} else {
+				return true;
+			}
 	}
 	return true;
 }

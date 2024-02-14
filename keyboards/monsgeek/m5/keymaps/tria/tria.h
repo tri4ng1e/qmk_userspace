@@ -26,10 +26,8 @@ enum layers {
 
 enum custom_keycodes {
     SELWORD = SAFE_RANGE,
-    SNCASET,
+    SNCASET, // sentense case toggle
 };
-
-#define SNDDEV LCTL(LGUI(KC_V))
 
 enum combos {
     CMB_PREV,
@@ -56,5 +54,6 @@ enum tap_dances {
     TD_CLF13,
 };
 
-#define T_CLF13 TD(TD_CLF13)
-#define TGMOUSE TG(L_MOUS)
+#define SNDDEV LCTL(LGUI(KC_V)) // open sound devices panel in Win11
+#define T_CLF13 TD(TD_CLF13)    // tap-danced capslock / lang switch
+#define TGMOUSE TG(L_MOUS)      // mouse layer toggle
