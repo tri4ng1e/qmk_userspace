@@ -2,6 +2,8 @@
 
 #include "tria_config.inc.h"
 
+extern uint16_t tria_turbo_key;
+
 __attribute__ ((weak))
 bool tria_process_custom_keycode_pressed(uint16_t keycode) { return true; }
 __attribute__ ((weak))
@@ -28,21 +30,16 @@ bool is_keycode_mouse_layer_indicator(uint16_t keycode) {
     ;
 }
 
+bool is_turbo_key_indicator(uint16_t keycode) {
+    return keycode == tria_turbo_key;
+}
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
     // bool    num_lock_on   = host_keyboard_led_state().num_lock;
     bool    caps_lock_on  = host_keyboard_led_state().caps_lock;
-    
-    // gray out inactive keys
-    rgb_matrix_set_color_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);
 
-    if (caps_lock_on) {
-        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_caps_indicator, 100);
-    }
-
-    if (is_sentence_case_on()) {
-        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_sentence_case_indicator, 100);
-    }
+    // rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, tria_turbo_key, 10, 255, 0);
 
     if (IS_LAYER_ON(L_LANG)) {
         rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_layer_indicator, 100);
@@ -59,6 +56,20 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, L_MOUS, is_keycode_mouse_layer_indicator, 100);
     }
 
+    if (caps_lock_on) {
+        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_caps_indicator, 100);
+    }
+
+    if (is_sentence_case_on()) {
+        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_sentence_case_indicator, 100);
+    }
+
+    // turbo key indicator
+    rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_turbo_key_indicator, -150);
+
+    // gray out inactive keys
+    rgb_matrix_set_color_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);
+
     return false;
 }
 
@@ -67,11 +78,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // tria
     reset_tria_idle_timer();
     process_tria_key_tracker(keycode, record);
+    if (!process_turbo_click_select(keycode, record, TRBSEL)) { return false; }
+    if (!process_turbo_click(keycode, record, TURBO))         { return false; }
     lang_word_process(keycode);
 
     // getreuer
     if (!process_select_word(keycode, record, SELWORD)) { return false; }
-    if (!process_sentence_case(keycode, record)) { return false; }
+    if (!process_sentence_case(keycode, record))        { return false; }
+    if (!process_layer_lock(keycode, record, LLOCK))    { return false; }
 
     // custom keycodes
     if (record->event.pressed) {

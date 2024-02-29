@@ -1,3 +1,5 @@
+DEFERRED_EXEC_ENABLE = yes
+
 ifeq ($(strip $(TRIA_KEY_TRACKER_REUSE_ENTRIES)), yes)
     OPT_DEFS += -DTRIA_KEY_TRACKER_REUSE_ENTRIES=true
 else
@@ -14,9 +16,12 @@ SRC += tria/utils.c
 SRC += tria/multi_lang.c
 SRC += tria/lang_word.c
 
+SRC += tria/turbo_click.c
+
 ifeq ($(strip $(TRIA_LANG_USE_ENRU)), yes)
     SRC += tria/multi_lang_enru.c
 endif
 
 SRC += getreuer/select_word.c
 SRC += getreuer/sentence_case.c
+SRC += getreuer/layer_lock.c

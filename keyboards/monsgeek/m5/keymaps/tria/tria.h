@@ -9,9 +9,11 @@
 #include "tria/lang_word.h"
 #include "tria/multi_lang.h"
 #include "tria/multi_lang_enru.h"
+#include "tria/turbo_click.h"
 
 #include "getreuer/select_word.h"
 #include "getreuer/sentence_case.h"
+#include "getreuer/layer_lock.h"
 
 #define ___0___ KC_NO
 #define COMMA ,
@@ -26,14 +28,16 @@ enum layers {
 
 enum custom_keycodes {
     SELWORD = SAFE_RANGE,
-    SNCASET, // sentense case toggle
+    SNCASET, // sentence case toggle
+    TRBSEL,  // turbo click select
+    TURBO,   // turbo click
+    LLOCK,   // layer lock
 };
 
 enum combos {
     CMB_PREV,
     CMB_NEXT,
     CMB_PAUSE,
-    CMB_RUS,
 };
 
 enum unicode_symbols {

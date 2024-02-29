@@ -18,6 +18,9 @@
 
 #include "tria.h"
 
+#include "tap_dances.h"
+#include "tria/tap_dance_magic.h"
+
 // clang-format off
 
 		// here, some quick templates for ya
@@ -68,7 +71,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___,
 		___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, UC_ACNT,          ___0___,                            ___0___, ___0___, ___0___,
 		___0___, ___0___, UC_XMRK, UC_CHCK, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___,                   ___0___,          UC_ARRU,          ___0___, ___0___, ___0___, ___0___,
-		___0___, ___0___, ___0___,                   ___0___,                            ___0___, ___0___, ___0___,          ___0___, UC_ARRL, UC_ARRD, UC_ARRR,          ___0___, ___0___),
+		___0___, ___0___, ___0___,                   ___0___,                            ___0___, ___0___, ___0___,          LLOCK,   UC_ARRL, UC_ARRD, UC_ARRR,          ___0___, ___0___),
 
 
     [L_FN] = LAYOUT( /* FN */
@@ -77,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		___0___,    ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, RGB_MOD,    ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, ___0___,
 		KC_CAPS,    ___0___, ___0___, ___0___, ___0___, ___0___, QK_LOCK, ___0___, ___0___, RGB_TOG, ___0___, ___0___,          RGB_HUI,                                        ___0___, ___0___, ___0___,
 		___0___,    ___0___, ___0___, ___0___, ___0___, ___0___, ___0___, TGMOUSE, ___0___, ___0___, ___0___,                   OSL(L_UNC),          RGB_VAI,          ___0___, ___0___, ___0___, ___0___,
-		TG(L_LANG), GUI_TOG, ___0___,                   SNCASET,                            ___0___, ___0___, ___0___,          ___0___,    RGB_SAD, RGB_VAD, RGB_SAI,          ___0___, ___0___),
+		TG(L_LANG), GUI_TOG, ___0___,                   SNCASET,                            ___0___, ___0___, ___0___,          LLOCK,      RGB_SAD, RGB_VAD, RGB_SAI,          TURBO,   TRBSEL),
 
 };
 // clang-format on
@@ -90,17 +93,6 @@ combo_t key_combos[] = {
     [CMB_PREV]   = COMBO(cmb_prev,   KC_MPRV),
     [CMB_NEXT]   = COMBO(cmb_next,   KC_MNXT),
     [CMB_PAUSE]  = COMBO(cmb_pause,  KC_MPLY),
-};
-
-TRIA_TD_CREATE_DOUBLE(TD_CLF13, // F13 for lang change + CapsLock on hold + lang case on double tap
-	tap_code16(KC_F13) COMMA tria_lang_check(KC_F13), TD_NO_ACTION,
-	register_code(KC_CAPS),                           unregister_code(KC_CAPS),
-	lang_word_toggle(),                               TD_NO_ACTION,
-	TD_NO_ACTION,                                     TD_NO_ACTION
-)
-
-tap_dance_action_t tap_dance_actions[] = {
-    TRIA_TD_ENTRY(TD_CLF13)
 };
 
 void tria_lang_init_user(void) {
