@@ -20,7 +20,7 @@ bool lang_word_is_active(void) {
 
 __attribute__ ((weak))
 bool lang_word_check_user(uint16_t keycode) {
-    return keycode == KC_SPC;
+    return keycode == KC_SPC || keycode == KC_ENT;
 }
 
 bool lang_word_process(uint16_t keycode) {
