@@ -96,10 +96,3 @@ td_state_t cur_dance(tap_dance_state_t *state);
     }
 
 #define TRIA_TD_ENTRY(name) [name] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, name##_finished, name##_reset),
-// #define TRIA_TD_KC_SIMPLE(kc)   register_code(kc), unregister_code(kc)
-// #define TRIA_TD_KC_SIMPLE16(kc) register_code16(kc), unregister_code16(kc)
-// #define TRIA_TD_KC_SIMPLE_TAP(kc)   tap_code(kc), TRIA_NO_ACTION
-// #define TRIA_TD_KC_SIMPLE_TAP16(kc) tap_code16(kc), TRIA_NO_ACTION
-
-// #define TRIA_TD_KC_SIMPLE_MOD(mod, kc)     TRIA_TD_KC_SIMPLE16(mod(kc))
-// #define TRIA_TD_KC_SIMPLE_TAP_MOD(mod, kc) TRIA_TD_KC_SIMPLE_TAP16(mod(kc))
