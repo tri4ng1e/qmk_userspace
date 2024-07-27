@@ -28,10 +28,12 @@
 #define _3H
 
 // and those to exchange long symbols for brackets
-#define TD_PRESS(act)   act, TD_NO_ACTION
-#define TD_RELEASE(act) TD_NO_ACTION, act
-#define TD_CODE(code)   register_code16(code), unregister_code16(code)
-#define TD_IGNORE       TD_NO_ACTION,          TD_NO_ACTION
+#define TD_PRESS(act)           act, TD_NO_ACTION
+#define TD_RELEASE(act)         TD_NO_ACTION, act
+#define TD_CODE(code)           register_code16(code), unregister_code16(code)
+#define TD_FULL(press, release) press, release
+#define TD_TWOFOLD(c1, c2)      TD_CODE(c1), TD_CODE(c1), TD_CODE(c2), TD_CODE(c2)
+#define TD_IGNORE               TD_NO_ACTION,          TD_NO_ACTION
 
 // Let the Cursed Magic begin!
 
@@ -73,5 +75,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #undef TD_DOUBLE_E
 #undef TD_TRIPLE_E
 
-
+#else // no TAP_DANCES found, make some placeholders for QMK
+tap_dance_action_t tap_dance_actions[] = {};
 #endif

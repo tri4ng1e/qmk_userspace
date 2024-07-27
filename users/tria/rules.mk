@@ -11,12 +11,14 @@ SRC += cimple_ring_buffer/cimple_ring_buffer.c
 SRC += tria/key_tracker.c
 SRC += tria/idle_timer.c
 SRC += tria/rgb_utils.c
-SRC += tria/tap_dance.c
 SRC += tria/utils.c
 SRC += tria/multi_lang.c
 SRC += tria/lang_word.c
-
 SRC += tria/turbo_click.c
+
+ifeq ($(strip $(TAP_DANCE_ENABLE)), yes)
+    SRC += tria/tap_dance.c
+endif
 
 ifeq ($(strip $(TRIA_LANG_USE_ENRU)), yes)
     SRC += tria/multi_lang_enru.c
