@@ -3,21 +3,50 @@
 
 #define TRIA_ARRAY_SIZEOF(a) (sizeof(a) / sizeof(a[0]))
 
+/*
+    normally, the buffers are hidden from user code, but since we want to get a color from it,
+    we need to manually define all types that live inside QMK's .c files related to buffers
+    and then extern those buffers, so we can access them
+*/
 #if defined(AW20216S_DRIVER_COUNT)
-  #define TRIA_DRIVER_COUNT AW20216S_DRIVER_COUNT
-  #define TRIA_PWM_REGISTER_COUNT 216
-  #define LED_TYPE       aw_led
-  #define LEDS_TYPE      g_aw_leds
+    #define TRIA_PWM_REGISTER_COUNT 216
+    #define LED_TYPE                aw_led
+    #define LEDS_TYPE               g_aw_leds
+
+    typedef struct aw20216s_driver_t {
+        uint8_t pwm_buffer[TRIA_PWM_REGISTER_COUNT];
+        bool    pwm_buffer_dirty;
+    } PACKED aw20216s_driver_t;
+    extern aw20216s_driver_t driver_buffers[AW20216S_DRIVER_COUNT];
+
 #elif defined(SNLED27351_I2C_ADDRESS_1)
-  #define TRIA_DRIVER_COUNT       SNLED27351_DRIVER_COUNT
-  #define TRIA_PWM_REGISTER_COUNT 192
-  #define LED_TYPE                ckled2001_led
-  #define LEDS_TYPE               g_ckled2001_leds
+    #define TRIA_PWM_REGISTER_COUNT     192
+    #define TRIA_CONTROL_REGISTER_COUNT 24
+    #define LED_TYPE                    ckled2001_led
+    #define LEDS_TYPE                   g_ckled2001_leds
+
+    typedef struct snled27351_driver_t {
+        uint8_t pwm_buffer[TRIA_PWM_REGISTER_COUNT];
+        bool    pwm_buffer_dirty;
+        uint8_t led_control_buffer[TRIA_CONTROL_REGISTER_COUNT];
+        bool    led_control_buffer_dirty;
+    } PACKED snled27351_driver_t;
+    extern snled27351_driver_t driver_buffers[SNLED27351_DRIVER_COUNT];
+
 #else
   #error Your LED driver is not supported by tria/rgb_utils.h yet
 #endif
 
-extern uint8_t g_pwm_buffer[TRIA_DRIVER_COUNT][TRIA_PWM_REGISTER_COUNT];
+#if defined(AW20216S_DRIVER_COUNT) || defined(SNLED27351_I2C_ADDRESS_1)
+    RGB tria_rgb_get_color_from_buffer(const LED_TYPE *led) {
+        RGB color = {
+            .r = driver_buffers[led->driver].pwm_buffer[led->r],
+            .g = driver_buffers[led->driver].pwm_buffer[led->g],
+            .b = driver_buffers[led->driver].pwm_buffer[led->b]
+        };
+        return color;
+    }
+#endif
 
 keypos_t led_key_pos[RGB_MATRIX_LED_COUNT];
 
@@ -49,9 +78,7 @@ RGB rgb_matrix_get_color(int index) {
     LED_TYPE led;
     if (index >= 0 && index < RGB_MATRIX_LED_COUNT) {
         memcpy_P(&led, (&LEDS_TYPE[index]), sizeof(led));
-        led_color.r = g_pwm_buffer[led.driver][led.r];
-        led_color.g = g_pwm_buffer[led.driver][led.g];
-        led_color.b = g_pwm_buffer[led.driver][led.b];
+        led_color = tria_rgb_get_color_from_buffer(&led);
     }
     return led_color;
 }
