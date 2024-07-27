@@ -165,32 +165,28 @@ bool tria_is_keycode_num_indicator(uint16_t keycode) {
 
 HSV rgb_to_hsv(RGB rgb) {
     HSV hsv;
-    uint8_t rgbMin, rgbMax;
+    uint8_t rgbMin, rgbMax, delta;
 
     rgbMin = rgb.r < rgb.g ? (rgb.r < rgb.b ? rgb.r : rgb.b) : (rgb.g < rgb.b ? rgb.g : rgb.b);
     rgbMax = rgb.r > rgb.g ? (rgb.r > rgb.b ? rgb.r : rgb.b) : (rgb.g > rgb.b ? rgb.g : rgb.b);
-    
     hsv.v = rgbMax;
-    if (hsv.v == 0)
-    {
+
+    if (rgbMax == 0) {
         hsv.h = 0;
         hsv.s = 0;
         return hsv;
     }
 
-    hsv.s = 255 * (long)(rgbMax - rgbMin) / hsv.v;
-    if (hsv.s == 0)
-    {
-        hsv.h = 0;
-        return hsv;
-    }
+    delta = rgbMax - rgbMin;
+    hsv.s = (uint8_t)((uint16_t)delta * 255 / rgbMax);
 
-    if (rgbMax == rgb.r)
-        hsv.h = 0 + 43 * (rgb.g - rgb.b) / (rgbMax - rgbMin);
-    else if (rgbMax == rgb.g)
-        hsv.h = 85 + 43 * (rgb.b - rgb.r) / (rgbMax - rgbMin);
-    else
-        hsv.h = 171 + 43 * (rgb.r - rgb.g) / (rgbMax - rgbMin);
+    if (rgbMax == rgb.r) {
+        hsv.h = (uint8_t)(43 * (rgb.g - rgb.b) / delta);
+    } else if (rgbMax == rgb.g) {
+        hsv.h = (uint8_t)(85 + 43 * (rgb.b - rgb.r) / delta);
+    } else {
+        hsv.h = (uint8_t)(171 + 43 * (rgb.r - rgb.g) / delta);
+    }
 
     return hsv;
 }
