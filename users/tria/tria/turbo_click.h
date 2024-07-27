@@ -13,6 +13,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
+// Modifications and additional new code in this file are licensed under the MIT License;
+// see the LICENSE file in the root directory of this project for the full license text.
 
 /**
  * @file mouse_turbo_click.h
