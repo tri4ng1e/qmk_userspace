@@ -22,8 +22,8 @@
 #elif defined(SNLED27351_I2C_ADDRESS_1)
     #define TRIA_PWM_REGISTER_COUNT     192
     #define TRIA_CONTROL_REGISTER_COUNT 24
-    #define LED_TYPE                    ckled2001_led
-    #define LEDS_TYPE                   g_ckled2001_leds
+    #define LED_TYPE                    snled27351_led_t
+    #define LEDS_TYPE                   g_snled27351_leds
 
     typedef struct snled27351_driver_t {
         uint8_t pwm_buffer[TRIA_PWM_REGISTER_COUNT];
