@@ -3,7 +3,7 @@
 #include "quantum.h"
 #include "cimple_ring_buffer/cimple_ring_buffer.h"
 
-#define TRIA_KEY_TRACKER_MAX_ENTRIES 30
+#define TRIA_KEY_TRACKER_MAX_ENTRIES 32
 
 #ifndef TRIA_KEY_TRACKER_REUSE_ENTRIES
 #define TRIA_KEY_TRACKER_REUSE_ENTRIES false
