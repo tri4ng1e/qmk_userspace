@@ -13,7 +13,6 @@
 
 #include "getreuer/select_word.h"
 #include "getreuer/sentence_case.h"
-#include "getreuer/layer_lock.h"
 
 #define ___0___ KC_NO
 #define COMMA ,
@@ -31,7 +30,6 @@ enum custom_keycodes {
     SNCASET, // sentence case toggle
     TRBSEL,  // turbo click select
     TURBO,   // turbo click
-    LLOCK,   // layer lock
 };
 
 enum combos {
@@ -51,7 +49,8 @@ enum unicode_symbols {
     UC_ARRR = UC(0x2192), // →
     UC_ARRD = UC(0x2193), // ↓
     UC_PLMN = UC(0x00b1), // ±
-    
+    UC_LEEQ = UC(0x2264), // ≤
+    UC_GREQ = UC(0x2265), // ≥
 };
 
 enum tap_dances {

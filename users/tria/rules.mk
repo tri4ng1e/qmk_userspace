@@ -26,4 +26,3 @@ endif
 
 SRC += getreuer/select_word.c
 SRC += getreuer/sentence_case.c
-SRC += getreuer/layer_lock.c
