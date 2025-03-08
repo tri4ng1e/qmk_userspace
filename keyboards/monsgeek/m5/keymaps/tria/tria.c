@@ -39,8 +39,6 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     // bool    num_lock_on   = host_keyboard_led_state().num_lock;
     bool    caps_lock_on  = host_keyboard_led_state().caps_lock;
 
-    // rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, tria_turbo_key, 10, 255, 0);
-
     if (IS_LAYER_ON(L_LANG)) {
         rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_layer_indicator, 100);
 
