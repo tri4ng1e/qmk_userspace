@@ -26,6 +26,7 @@ typedef struct {
 } tria_tracker_index_pair_t;
 
 extern ring_buffer_t tria_tracker_rb;
+extern uint16_t tria_keys_held;
 
 void tria_key_tracker_init(void);
 

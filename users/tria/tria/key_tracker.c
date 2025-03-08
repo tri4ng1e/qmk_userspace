@@ -2,6 +2,7 @@
 #include "tria/rgb_utils.h"
 
 ring_buffer_t tria_tracker_rb;
+uint16_t tria_keys_held = 0;
 
 uint16_t tria_key_tracker_timer = 0;
 
@@ -42,7 +43,7 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
             if (
                 item->index == leds[j]
 #if TRIA_KEY_TRACKER_REUSE_ENTRIES == false
-                && (item->tick == 0 && !record->event.pressed) 
+                && (item->tick == 0 && !record->event.pressed)
 #endif
             ) {
                 item->tick = record->event.pressed? 0 : 1;
@@ -55,6 +56,9 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
     uint8_t current_layer = get_highest_layer(layer_state);
 
     if (record->event.pressed) {
+        if (tria_keys_held < (uint16_t)(-1)) {
+            tria_keys_held++;
+        }
         // add new LEDs
         for (uint8_t i = 0; i < leds_count; i++) {
             if (leds[i] == NO_LED) {
@@ -69,6 +73,10 @@ void process_tria_key_tracker(uint16_t keycode, keyrecord_t *record) {
             item->y = g_led_config.point[leds[i]].y;
             item->tick = 0;
             item->index = leds[i];
+        }
+    } else {
+        if (tria_keys_held > 0) {
+            tria_keys_held--;
         }
     }
 }

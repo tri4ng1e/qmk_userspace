@@ -6,6 +6,7 @@ RGB_MATRIX_EFFECT(TRIA_GRADIENT_UP_DOWN)
 #include "tria/idle_timer.h"
 #include "cimple_ring_buffer/cimple_ring_buffer.h"
 extern ring_buffer_t tria_tracker_rb;
+extern uint16_t tria_keys_held;
 
 // extern const uint16_t tria_idle_timeout;
 // extern uint16_t tria_idle_brightness;
@@ -58,7 +59,7 @@ bool TRIA_GRADIENT_UP_DOWN(effect_params_t* params) {
     // idle brightness animation setup
     uint8_t idle_effect = 0;
     if (tria_idle_enabled) {
-        uint16_t idle_seconds = tria_seconds_idle();
+        uint16_t idle_seconds = tria_keys_held ? 0 : tria_seconds_idle();
         bool tria_idle_new = idle_seconds >= tria_idle_timeout;
         if (tria_idle != tria_idle_new) {
             tria_idle = tria_idle_new;
