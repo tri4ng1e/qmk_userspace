@@ -13,14 +13,6 @@ bool is_keycode_sentence_case_indicator(uint16_t keycode) {
     return keycode == SNCASET || keycode == KC_SPC;
 }
 
-bool is_keycode_lang_layer_indicator(uint16_t keycode) {
-    return keycode == KC_LGUI;
-}
-
-bool is_keycode_lang_indicator(uint16_t keycode) {
-    return keycode == KC_LALT;
-}
-
 bool is_keycode_mouse_layer_indicator(uint16_t keycode) {
     return (keycode >= KC_NUM && keycode <= KC_KP_DOT) ||
            (keycode >= KC_MS_U && keycode <= KC_MS_BTN2) ||
@@ -40,13 +32,13 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     bool    caps_lock_on  = host_keyboard_led_state().caps_lock;
 
     if (IS_LAYER_ON(L_LANG)) {
-        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_layer_indicator, 100);
+        rgb_matrix_hsvshift_by_keycode(led_min, led_max, current_layer, KC_LGUI, 100);
 
         switch (tria_lang_get()) {
             case TRIA_EN:
                 break;
             case TRIA_RU:
-                rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_keycode_lang_indicator, 100);
+                rgb_matrix_hsvshift_by_keycode(led_min, led_max, current_layer, KC_LALT, 100);
         }
     }
 
@@ -63,7 +55,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     // turbo key indicator
-    rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_turbo_key_indicator, -150);
+    rgb_matrix_hsvshift_by_keycode(led_min, led_max, current_layer, tria_turbo_key, -150);
 
     // gray out inactive keys
     rgb_matrix_set_color_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_norgb, 0, 0, 0);

@@ -4,9 +4,9 @@
 #define TRIA_ARRAY_SIZEOF(a) (sizeof(a) / sizeof(a[0]))
 
 /*
-    normally, the buffers are hidden from user code, but since we want to get a color from it,
+    Normally, the buffers are hidden from user code, but since we want to get a color from it,
     we need to manually define all types that live inside QMK's .c files related to buffers
-    and then extern those buffers, so we can access them
+    and then extern those buffers, so we can access them.
 */
 #if defined(AW20216S_DRIVER_COUNT)
     #define TRIA_PWM_REGISTER_COUNT 216
@@ -37,21 +37,20 @@
   #error Your LED driver is not supported by tria/rgb_utils.h yet
 #endif
 
-#if defined(AW20216S_DRIVER_COUNT) || defined(SNLED27351_I2C_ADDRESS_1)
-    RGB tria_rgb_get_color_from_buffer(const LED_TYPE *led) {
-        RGB color = {
-            .r = driver_buffers[led->driver].pwm_buffer[led->r],
-            .g = driver_buffers[led->driver].pwm_buffer[led->g],
-            .b = driver_buffers[led->driver].pwm_buffer[led->b]
-        };
-        return color;
-    }
-#endif
+RGB tria_rgb_get_color_from_buffer(const LED_TYPE *led) {
+    RGB color = {
+        .r = driver_buffers[led->driver].pwm_buffer[led->r],
+        .g = driver_buffers[led->driver].pwm_buffer[led->g],
+        .b = driver_buffers[led->driver].pwm_buffer[led->b]
+    };
+    return color;
+}
 
+// Global lookup table for LED key positions
 keypos_t led_key_pos[RGB_MATRIX_LED_COUNT];
 
 void init_tria_rgb_utils(void) {
-    // fill up lookup table for corresponding key position for a led
+    // Build lookup table for corresponding key position for each LED
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
             uint8_t led_index = g_led_config.matrix_co[row][col];
@@ -62,8 +61,6 @@ void init_tria_rgb_utils(void) {
     }
 }
 
-////////////////////////////////////////////////////////////
-
 uint16_t rgb_led_to_keycode(int8_t layer, uint16_t led, bool fallthrough) {
     uint16_t ret = keymap_key_to_keycode(layer, led_key_pos[led]);
     while (fallthrough && ret == KC_TRNS && layer >= 0) {
@@ -73,8 +70,8 @@ uint16_t rgb_led_to_keycode(int8_t layer, uint16_t led, bool fallthrough) {
     return ret;
 }
 
-RGB rgb_matrix_get_color(int index) { 
-    RGB led_color;
+RGB rgb_matrix_get_color(int index) {
+    RGB led_color = {0, 0, 0};  // Default color in case of an invalid index
     LED_TYPE led;
     if (index >= 0 && index < RGB_MATRIX_LED_COUNT) {
         memcpy_P(&led, (&LEDS_TYPE[index]), sizeof(led));
@@ -92,8 +89,6 @@ void rgb_matrix_set_color_hsv(int index, HSV hsv) {
     RGB c = hsv_to_rgb(hsv);
     rgb_matrix_set_color(index, c.r, c.g, c.b);
 }
-
-
 
 void rgb_matrix_set_color_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), uint8_t red, uint8_t green, uint8_t blue) {
     for (uint8_t i = led_min; i < led_max; i++) {
@@ -117,22 +112,26 @@ void rgb_matrix_hsvshift_by_keycode_fn(uint8_t led_min, uint8_t led_max, uint8_t
     }
 }
 
-bool (*tria_create_predicate_from_value(uint16_t kc))(uint16_t) {
-    bool predicate(uint16_t x) { return x == kc; }
-    return &predicate;
+/*
+    Improved keycode predicate implementation:
+    Instead of using a nested function (which is nonstandard), use a static variable
+    and a simple wrapper function for equality testing.
+*/
+static uint16_t target_keycode;
+
+static bool predicate_wrapper(uint16_t x) {
+    return x == target_keycode;
 }
 
 void rgb_matrix_set_color_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, uint16_t keycode, uint8_t red, uint8_t green, uint8_t blue) {
-    bool (*pred)(uint16_t) = tria_create_predicate_from_value(keycode);
-    rgb_matrix_set_color_by_keycode_fn(led_min, led_max, layer, pred, red, green, blue);
+    target_keycode = keycode;
+    rgb_matrix_set_color_by_keycode_fn(led_min, led_max, layer, predicate_wrapper, red, green, blue);
 }
 
 void rgb_matrix_hsvshift_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, uint16_t keycode, int16_t shift) {
-    bool (*pred)(uint16_t) = tria_create_predicate_from_value(keycode);
-    rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, layer, pred, shift);
+    target_keycode = keycode;
+    rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, layer, predicate_wrapper, shift);
 }
-
-////////////////////////////////////////////////////////////
 
 __attribute__ ((weak))
 bool tria_is_keycode_norgb_user(uint16_t keycode) {
@@ -160,8 +159,6 @@ bool tria_is_keycode_caps_indicator(uint16_t keycode) {
 bool tria_is_keycode_num_indicator(uint16_t keycode) {
     return tria_is_keycode_num_indicator_user(keycode);
 }
-
-////////////////////////////////////////////////////////////
 
 HSV rgb_to_hsv(RGB rgb) {
     HSV hsv;
