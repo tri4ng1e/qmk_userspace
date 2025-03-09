@@ -7,7 +7,7 @@
 uint16_t tria_idle_timer = 0;
 uint16_t tria_idle_seconds = 0;
 
-void reset_tria_idle_timer(void) {
+void tria_reset_idle_timer(void) {
     tria_idle_timer = timer_read();
     tria_idle_seconds = 0;
 }
@@ -20,7 +20,7 @@ uint32_t tria_seconds_idle(void) {
 #endif
 }
 
-void process_tria_idle_timer(void) {
+void tria_process_idle_timer(void) {
     uint16_t time_delta = timer_elapsed(tria_idle_timer);
     if (time_delta > 1000) {
         tria_idle_timer = timer_read();

@@ -66,7 +66,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // tria
-    reset_tria_idle_timer();
+    tria_reset_idle_timer();
     tria_key_tracker_process_event(keycode, record);
     if (!process_turbo_click_select(keycode, record, TRBSEL)) { return false; }
     if (!process_turbo_click(keycode, record, TURBO))         { return false; }
@@ -100,14 +100,14 @@ void keyboard_post_init_user(void) {
     init_tria_rgb_utils();
     tria_lang_init();
     tria_key_tracker_init();
-    reset_tria_idle_timer();
+    tria_reset_idle_timer();
 }
 
 
 void housekeeping_task_user(void) {
     // tria tasks
     tria_key_tracker_process_tick();
-    process_tria_idle_timer();
+    tria_process_idle_timer();
 
     // getreuer tasks
     select_word_task();
