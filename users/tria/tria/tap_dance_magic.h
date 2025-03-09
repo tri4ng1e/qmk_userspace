@@ -13,27 +13,35 @@
 ▓▓▓▓▓▓        ▓▓  ▓▓▓▓  ▓▓  ▓▓▓   ▓▓▓▓▓  ▓▓▓▓▓  ▓▓▓▓▓▓▓▓▓▓▓▓
 ██████  █  █  ██        ██  ████  █████  █████  ████  ██████
 ██████  ████  ██  ████  ███      ███        ███      ███████
+
+  This file provides helper macros for defining tap dance functions in a centralized way.
+  It leverages the TRIA_TD_* macros defined in tria/tap_dance.h.
 */
 
 #ifdef TAP_DANCES
 
-// we are cursed enough already, take those helpers with you
+// We are cursed enough already, take those helpers with you.
 
-// those are just to indicate the parameter pack
-#define _1T
-#define _1H
-#define _2T
-#define _2H
-#define _3T
-#define _3H
+// Those are just to indicate the parameter pack order.
+#define _1T // Single tap
+#define _1H // Single hold
+#define _2T // Double tap
+#define _2H // Double hold
+#define _3T // Triple tap
+#define _3H // Triple hold
 
-// and those to exchange long symbols for brackets
+// And those to exchange long symbols for brackets.
+// TD_PRESS   : Execute an action on press.
+// TD_RELEASE : Execute an action on release.
+// TD_CODE    : Send a key code and then unregister it.
+// TD_IGNORE  : Ignore press and release action
+// TD_TWOFOLD : Use same codes for pressing and holding for single and double taps.
 #define TD_PRESS(act)           act, TD_NO_ACTION
 #define TD_RELEASE(act)         TD_NO_ACTION, act
 #define TD_CODE(code)           register_code16(code), unregister_code16(code)
-#define TD_FULL(press, release) press, release
-#define TD_TWOFOLD(c1, c2)      TD_CODE(c1), TD_CODE(c1), TD_CODE(c2), TD_CODE(c2)
 #define TD_IGNORE               TD_NO_ACTION,          TD_NO_ACTION
+#define TD_TWOFOLD(c1, c2)      TD_CODE(c1), TD_CODE(c1), TD_CODE(c2), TD_CODE(c2)
+
 
 // Let the Cursed Magic begin!
 
@@ -47,12 +55,9 @@
 
 // First Transformation : functions and objects
 
-#define TD_TAPHOLD_E(...) \
-    TRIA_TD_CREATE_TAP_HOLD(__VA_ARGS__)
-#define TD_DOUBLE_E(...) \
-    TRIA_TD_CREATE_DOUBLE(__VA_ARGS__)
-#define TD_TRIPLE_E(...) \
-    TRIA_TD_CREATE(__VA_ARGS__)
+#define TD_TAPHOLD_E(...) TRIA_TD_CREATE_TAP_HOLD(__VA_ARGS__)
+#define TD_DOUBLE_E(...)  TRIA_TD_CREATE_DOUBLE(__VA_ARGS__)
+#define TD_TRIPLE_E(...)  TRIA_TD_CREATE(__VA_ARGS__)
 // -- -- -- -- -- --
 TAP_DANCES
 // -- -- -- -- -- --
