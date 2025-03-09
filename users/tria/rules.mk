@@ -8,13 +8,18 @@ endif
 
 SRC += cimple_ring_buffer/cimple_ring_buffer.c
 
-SRC += tria/key_tracker.c
+
 SRC += tria/idle_timer.c
 SRC += tria/rgb_utils.c
 SRC += tria/utils.c
 SRC += tria/multi_lang.c
 SRC += tria/lang_word.c
 SRC += tria/turbo_click.c
+
+ifeq ($(strip $(TRIA_KEY_TRACKER_ENABLE)), yes)
+    OPT_DEFS += -DTRIA_KEY_TRACKER_ENABLED=1
+    SRC += tria/key_tracker.c
+endif
 
 ifeq ($(strip $(TAP_DANCE_ENABLE)), yes)
     SRC += tria/tap_dance.c
