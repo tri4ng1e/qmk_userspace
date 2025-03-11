@@ -26,10 +26,75 @@ bool is_turbo_key_indicator(uint16_t keycode) {
     return keycode == tria_turbo_key;
 }
 
+static bool is_alpha_key(uint16_t keycode) {
+    return (keycode >= KC_A && keycode <= KC_0) ||
+            keycode == KC_MINS ||
+            keycode == KC_EQL  ||
+            keycode == KC_LBRC ||
+            keycode == KC_RBRC ||
+            keycode == KC_SCLN ||
+            keycode == KC_QUOT ||
+            keycode == KC_COMM ||
+            keycode == KC_DOT  ||
+            keycode == KC_SLSH;
+}
+static bool is_numpad_key(uint16_t keycode) {
+    return (keycode >= KC_NUM_LOCK && keycode <= KC_KP_DOT);
+}
+
+// Add static variables for animation tracking
+static bool prev_caps_lock = false;
+static int16_t caps_hue_shift = 0;
+#define CAPS_HUE_SHIFT_TARGET 100
+#define CAPS_HUE_SHIFT_STEP   2
+
+static bool prev_num_lock = false;
+static int16_t num_hue_shift = 0;
+#define NUM_HUE_SHIFT_TARGET  175
+#define NUM_HUE_SHIFT_STEP    2
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
-    // bool    num_lock_on   = host_keyboard_led_state().num_lock;
-    bool    caps_lock_on  = host_keyboard_led_state().caps_lock;
+
+    // caps animation
+    bool current_caps_lock = host_keyboard_led_state().caps_lock;
+    if (current_caps_lock != prev_caps_lock) { prev_caps_lock = current_caps_lock; }
+    // Animate Caps Lock shift
+    if (current_caps_lock) {
+        if (caps_hue_shift < CAPS_HUE_SHIFT_TARGET) {
+            caps_hue_shift += CAPS_HUE_SHIFT_STEP;
+            if (caps_hue_shift > CAPS_HUE_SHIFT_TARGET) caps_hue_shift = CAPS_HUE_SHIFT_TARGET;
+        }
+    } else {
+        if (caps_hue_shift > 0) {
+            caps_hue_shift -= CAPS_HUE_SHIFT_STEP;
+            if (caps_hue_shift < 0) caps_hue_shift = 0;
+        }
+    }
+    if (caps_hue_shift != 0) {
+        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_alpha_key, caps_hue_shift);
+    }
+
+    // num animation
+    bool current_num_lock = !host_keyboard_led_state().num_lock;
+    if (current_num_lock != prev_num_lock) {
+        prev_num_lock = current_num_lock;
+    }
+
+    // Animate Num Lock shift
+    if (current_num_lock) {
+        if (num_hue_shift < NUM_HUE_SHIFT_TARGET) {
+            num_hue_shift += NUM_HUE_SHIFT_STEP;
+            if (num_hue_shift > NUM_HUE_SHIFT_TARGET) num_hue_shift = NUM_HUE_SHIFT_TARGET;
+        }
+    } else {
+        if (num_hue_shift > 0) {
+            num_hue_shift -= NUM_HUE_SHIFT_STEP;
+            if (num_hue_shift < 0) num_hue_shift = 0;
+        }
+    }
+
+    // indicators
 
     if (IS_LAYER_ON(L_LANG)) {
         rgb_matrix_hsvshift_by_keycode(led_min, led_max, current_layer, KC_LGUI, 100);
@@ -44,10 +109,10 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     if (IS_LAYER_ON(L_MOUS)) {
         rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, L_MOUS, is_keycode_mouse_layer_indicator, 100);
-    }
-
-    if (caps_lock_on) {
-        rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, tria_is_keycode_caps_indicator, 100);
+    } else {
+        if (num_hue_shift != 0) {
+            rgb_matrix_hsvshift_by_keycode_fn(led_min, led_max, current_layer, is_numpad_key, num_hue_shift);
+        }
     }
 
     if (is_sentence_case_on()) {
