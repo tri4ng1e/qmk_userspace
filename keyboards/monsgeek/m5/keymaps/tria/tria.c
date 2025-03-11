@@ -14,11 +14,9 @@ bool is_keycode_sentence_case_indicator(uint16_t keycode) {
 }
 
 bool is_keycode_mouse_layer_indicator(uint16_t keycode) {
-    return (keycode >= KC_NUM && keycode <= KC_KP_DOT) ||
-           (keycode >= KC_MS_U && keycode <= KC_MS_BTN2) ||
-            keycode == KC_MS_WH_UP ||
-            keycode == KC_MS_WH_DOWN ||
-           (keycode >= KC_MS_ACCEL0 && keycode <= KC_MS_ACCEL2)
+    return
+        // (keycode >= KC_NUM && keycode <= KC_KP_DOT) ||
+        (keycode >= QK_MOUSE_CURSOR_UP && keycode <= QK_MOUSE_ACCELERATION_2)
     ;
 }
 

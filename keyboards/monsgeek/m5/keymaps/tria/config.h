@@ -7,8 +7,11 @@
 
 // qmk mouse settings
 #define MK_KINETIC_SPEED
-#define MOUSEKEY_MOVE_DELTA 10
-#define MOUSEKEY_BASE_SPEED 4000
+#define MOUSEKEY_INTERVAL          5     // default 10
+#define MOUSEKEY_MOVE_DELTA        16    // default 16
+#define MOUSEKEY_INITIAL_SPEED     150   // default 100
+#define MOUSEKEY_BASE_SPEED        3500  // default 5000
+#define MOUSEKEY_ACCELERATED_SPEED 2000  // default 3000
 
 // getreuer settings
 #define SELECT_WORD_TIMEOUT   1500
